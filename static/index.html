@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EMG2MCU — AutoML for EMG, deployable to microcontrollers</title>
+  <meta name="description" content="EMG2MCU is an end-to-end AutoML framework for surface-EMG: preprocessing, event detection, feature extraction, model selection and C++/Arduino model generation for microcontrollers. pip install emg2mcu.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M1 12c1.5 0 1.5-7 3-7s1.5 7 3 7 1.5-9 3-9 1.5 8 3 8' fill='none' stroke='%23a9d2ff' stroke-width='2.4' stroke-linecap='round'/><path d='M1 6c1.5 0 1.5-3 3-3s1.5 6 3 6 1.5-5 3-5 1.5 4 3 4' fill='none' stroke='%231a1fb4' stroke-width='2.4' stroke-linecap='round'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/landing.css">
+  <script>
+    // Apply a saved theme before first paint; light is the default.
+    try { if (localStorage.getItem("emg2mcu.theme") === "dark") document.documentElement.dataset.theme = "dark"; } catch (e) {}
+  </script>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="nav-brand" href="./" aria-label="EMG2MCU home">
+        <svg class="nav-mark" viewBox="0 0 34 22" aria-hidden="true"><path class="w1" d="M2 17C6 17 7 8.5 11 8.5S16 19 20 19 26 5 32 6.5"/><path class="w2" d="M2 13.5C6 13.5 7 4 11 4S16 15.5 20 15.5 26 1.5 32 3"/></svg>
+        <span>EMG2MCU</span>
+      </a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="#install" class="hide-sm">Install</a>
+        <a href="#how" class="hide-sm">How it works</a>
+        <a href="#outputs" class="hide-sm">Outputs</a>
+        <a href="https://emg2mcu.readthedocs.io/">Docs</a>
+        <a href="sandbox/">Sandbox</a>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false">
+          <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+          <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>
+        </button>
+        <a class="btn btn-sm" href="https://github.com/LENeR-UEL/EMG2MCU">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <svg class="hero-logo" viewBox="0 0 900 240" role="img" aria-label="EMG2MCU logo" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="emg-grad-1" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#a9d2ff"/>
+              <stop offset="1" stop-color="#2f4ae0"/>
+            </linearGradient>
+            <linearGradient id="emg-grad-2" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#1a1fb4"/>
+              <stop offset="1" stop-color="#0e8a78"/>
+            </linearGradient>
+          </defs>
+          <g transform="translate(0,40)">
+            <text x="450" y="80" text-anchor="middle" font-family="Outfit, system-ui, sans-serif" font-weight="800" font-size="84" letter-spacing="-2" fill="#10142b">EMG2MCU</text>
+            <text x="450" y="130" text-anchor="middle" font-family="Outfit, system-ui, sans-serif" font-weight="500" font-size="26" fill="#4c5573">Electromyography to Microcontroller</text>
+            <path d="M0 170 H900" stroke="#10142b" stroke-width="2.5"/>
+            <g transform="translate(0,180)">
+              <path d="M0 30 C30 30 35 -10 70 -10 S100 25 140 25 180 -20 220 -20 260 30 300 30 340 -10 380 -10 420 30 460 30 500 -20 540 -20 580 30 620 30 660 -10 700 -10 740 30 780 30 820 -20 860 -20 900 30 900 30" fill="none" stroke="url(#emg-grad-1)" stroke-width="4" stroke-linecap="round"/>
+              <path d="M0 50 C30 50 35 10 70 10 S100 45 140 45 180 0 220 0 260 50 300 50 340 10 380 10 420 50 460 50 500 0 540 0 580 50 620 50 660 10 700 10 740 50 780 50 820 0 860 0 900 50 900 50" fill="none" stroke="url(#emg-grad-2)" stroke-width="4" stroke-linecap="round"/>
+            </g>
+          </g>
+        </svg>
+        <p class="lede">An <strong>end-to-end AutoML</strong> framework for surface-EMG: <strong>filtering</strong>,
+          <strong>event detection</strong>, <strong>feature extraction</strong>, <strong>model selection</strong> across
+          gradient boosting, random forests and linear models, and <strong>deployable C++/Arduino</strong> code for
+          microcontrollers such as the ESP32.</p>
+        <ul class="tags" aria-label="Topics">
+          <li class="tag">EMG</li>
+          <li class="tag tag-sky">AutoML</li>
+          <li class="tag tag-navy">Embedded</li>
+          <li class="tag tag-teal">ESP32</li>
+        </ul>
+
+        <div class="install" id="install-hero">
+          <code><span class="prompt" aria-hidden="true">$</span> <span data-copy-src>pip install emg2mcu</span></code>
+          <button class="copy" type="button" data-copy>Copy</button>
+        </div>
+        <p class="meta"><span id="version">emg2mcu 0.1.0</span> on
+          <a href="https://pypi.org/project/emg2mcu/">PyPI</a> · Python 3.10+ · MIT license</p>
+
+        <div class="cta">
+          <a class="btn btn-primary" href="https://emg2mcu.readthedocs.io/">Read the docs</a>
+          <a class="btn" href="sandbox/">Try it in the browser</a>
+          <a class="btn" href="https://github.com/LENeR-UEL/EMG2MCU">View on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap figure-section" aria-label="Example output">
+      <figure class="card fig">
+        <div class="plot"><iframe src="assets/figures/pipeline.html" title="EMG2MCU pipeline on the synthetic three-class recording: raw, filtered, event windows, features and model ranking" loading="lazy"></iframe></div>
+        <figcaption>EMG2MCU's pipeline on the <a href="#install">quickstart example</a>: a deterministic synthetic
+          three-channel recording with three gesture classes. From top to bottom: <strong>raw</strong> signal,
+          <strong>bandpass + notch filtered</strong> signal, the <strong>detected events</strong> after onset detection,
+          the <strong>time-domain features</strong> per window, and the <strong>model ranking</strong> across gradient
+          boosting, random forests and linear models. Hover for values, drag to zoom, double-click to reset ·
+          <a href="assets/figures/pipeline.html">open on its own</a>.</figcaption>
+      </figure>
+    </section>
+
+    <section class="wrap section" id="how">
+      <h2>How it works</h2>
+      <ol class="pipeline">
+        <li><span class="step step-pale" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 18c2 0 2.5-9 5-9s2.5 6 4.5 6S15 5 17 5s2.5 13 4 13"/><path d="M3 21h18" opacity=".5"/></svg></span>
+          <strong>EMG preprocessing</strong><span>bandpass + notch filters, causal or zero-phase</span></li>
+        <li><span class="step step-sky" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="4" height="18" rx="1"/><rect x="10" y="3" width="4" height="18" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/><path d="M5 9h18M5 15h18" opacity=".45"/></svg></span>
+          <strong>Event detection</strong><span>onset / offset with envelope smoothing</span></li>
+        <li><span class="step step-blue" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" opacity=".45"/><path d="M8 4v16M15 4v16"/></svg></span>
+          <strong>Windowing</strong><span>sliding windows with configurable overlap</span></li>
+        <li><span class="step step-navy" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5h7M17.5 14v7"/></svg></span>
+          <strong>Feature extraction</strong><span>time-domain (RMS, MAV, …) per channel per window</span></li>
+        <li><span class="step step-teal" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="7" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M8.2 7h7.6M7.2 9l3.6 7M16.8 9l-3.6 7"/></svg></span>
+          <strong>Model selection</strong><span>LightGBM, XGBoost, CatBoost, RF, SVM, MLP, …</span></li>
+        <li><span class="step step-rose" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z" opacity=".35"/><path d="M8 9h8M8 13h8M8 17h5" /><circle cx="18" cy="18" r="3" fill="currentColor" stroke="none"/></svg></span>
+          <strong>MCU deploy</strong><span>exportable C++/Arduino, ESP32 biquad filter</span></li>
+      </ol>
+      <p class="note">EMG2MCU wires the whole loop with configuration dataclasses (<code>DataConfig</code>,
+        <code>PreprocessingConfig</code>, <code>EventsConfig</code>, <code>WindowingConfig</code>,
+        <code>FeatureConfig</code>, <code>NormalizeConfig</code>, <code>ClassificationConfig</code>) and a single
+        <code>automl()</code> entry point. Filtering is available in zero-phase (benchmark) and causal-SOS (deploy)
+        modes so the same parameters carry over to the on-device filter. The deploy step generates the biquad
+        coefficients the firmware needs and scaffolds the C++/Arduino code that runs them on the chip.</p>
+    </section>
+
+    <section class="wrap section" id="outputs">
+      <h2>What you get</h2>
+      <div class="grid">
+        <article class="card metric metric-navy">
+          <h3>Filtered signals</h3>
+          <p>Zero-phase bandpass + notch filtering, ready to use as features or to drive the deployable causal filter
+            with the same parameters.</p>
+        </article>
+        <article class="card metric metric-sky">
+          <h3>Detected events</h3>
+          <p>Onset/offset events from an envelope smoother, with a configurable sustain window to avoid spurious
+            triggers between repetitions.</p>
+        </article>
+        <article class="card metric metric-teal">
+          <h3>Windowed features</h3>
+          <p>Per-channel, per-window time-domain features (RMS, MAV, ZC, SSC, …) optionally normalised before
+            classification.</p>
+        </article>
+        <article class="card metric metric-rose">
+          <h3>Model ranking</h3>
+          <p>Cross-validated accuracy, F1 and ROC AUC for every algorithm in <code>ClassificationConfig</code>, sorted by
+            the metric you choose.</p>
+        </article>
+      </div>
+      <div class="gallery">
+        <figure class="card fig">
+          <div class="plot"><iframe src="assets/figures/model-comparison.html" title="Model comparison on the quickstart synthetic recording: cross-validated accuracy and F1 across classifiers" loading="lazy"></iframe></div>
+          <figcaption><strong>Model comparison</strong> on the quickstart example, sorted by accuracy.
+            Gradient-boosted models and random forests lead on the time-domain features; linear models trail but stay
+            close · <a href="assets/figures/model-comparison.html">open on its own</a>.</figcaption>
+        </figure>
+        <figure class="card fig">
+          <div class="plot"><iframe src="assets/figures/esp32-code.html" title="Generated ESP32 deployable: biquad filter coefficients and a skeleton Arduino sketch" loading="lazy"></iframe></div>
+          <figcaption><strong>Deployable ESP32 code</strong> generated by the pipeline: the biquad coefficients
+            computed from the same filter parameters used offline, plus a skeleton Arduino sketch that runs the
+            filter on the chip · <a href="assets/figures/esp32-code.html">open on its own</a>.</figcaption>
+        </figure>
+      </div>
+      <p class="note">The figures on this page are produced by running the pipeline in
+        <a href="https://emg2mcu.readthedocs.io/">EMG2MCU</a> and rendering the results with Plotly. Open the
+        <a href="sandbox/">Sandbox</a> to run the same example in your browser.</p>
+    </section>
+
+    <section class="wrap section" id="install">
+      <h2>Get started</h2>
+      <div class="steps">
+        <div class="card step-card">
+          <h3><span class="num">1</span> Install the package</h3>
+          <div class="install install-block">
+            <code><span class="prompt" aria-hidden="true">$</span> <span data-copy-src>pip install emg2mcu</span></code>
+            <button class="copy" type="button" data-copy>Copy</button>
+          </div>
+          <p class="small">Pulls in NumPy, pandas, SciPy, scikit-learn, LightGBM, XGBoost, CatBoost, joblib and tsfresh.</p>
+        </div>
+        <div class="card step-card">
+          <h3><span class="num">2</span> Build the docs locally (optional)</h3>
+          <div class="install install-block">
+            <code><span class="prompt" aria-hidden="true">$</span> <span data-copy-src>pip install "emg2mcu[docs]"</span></code>
+            <button class="copy" type="button" data-copy>Copy</button>
+          </div>
+          <p class="small">Adds Sphinx, pydata-sphinx-theme, autoapi, myst-parser, copybutton and sphinx-design for
+            the Read the Docs site.</p>
+        </div>
+      </div>
+
+      <div class="card code-card">
+        <div class="code-head">
+          <h3><span class="num">3</span> Run the example</h3>
+          <button class="copy" type="button" data-copy>Copy</button>
+        </div>
+<pre><code data-copy-src><span class="k">from</span> pathlib <span class="k">import</span> Path
+<span class="k">import</span> tempfile
+<span class="k">import</span> numpy <span class="k">as</span> np
+
+<span class="k">import</span> EMG2MCU
+
+<span class="m"># 1. Build a deterministic synthetic three-class recording (no real data needed)</span>
+fs = <span class="n">1000</span>
+rng = np.random.default_rng(<span class="n">42</span>)
+signal_blocks, label_blocks = [], []
+
+<span class="k">def</span> <span class="n">add_segment</span>(label, duration_s, amplitudes):
+    n = int(duration_s * fs)
+    t = np.arange(n) / fs
+    seg = rng.normal(<span class="n">0</span>, <span class="n">0.015</span>, size=(<span class="n">3</span>, n))
+    <span class="k">if</span> label &gt;= <span class="n">0</span>:
+        fade = np.minimum(<span class="n">1</span>, np.minimum(t / <span class="n">0.15</span>, (duration_s - t) / <span class="n">0.15</span>))
+        freqs = np.array([<span class="n">83</span>, <span class="n">117</span>, <span class="n">151</span>]) + <span class="n">7</span> * label
+        carriers = np.sin(<span class="n">2</span> * np.pi * freqs[:, <span class="c">None</span>] * t)
+        seg += np.asarray(amplitudes)[:, <span class="c">None</span>] * fade * carriers
+    signal_blocks.append(seg.T)
+    label_blocks.append(np.full(n, label, dtype=int))
+
+<span class="k">for</span> label, amps <span class="k">in</span> <span class="n">enumerate</span>([[<span class="n">0.8</span>, <span class="n">0.15</span>, <span class="n">0.15</span>], [<span class="n">0.15</span>, <span class="n">0.8</span>, <span class="n">0.15</span>], [<span class="n">0.15</span>, <span class="n">0.15</span>, <span class="n">0.8</span>]]):
+    <span class="n">add_segment</span>(label, <span class="n">3.0</span>, amps)
+    <span class="n">add_segment</span>(-<span class="n">1</span>, <span class="n">0.5</span>, [<span class="n">0</span>, <span class="n">0</span>, <span class="n">0</span>])
+
+signals = np.concatenate(signal_blocks, axis=<span class="n">0</span>)
+labels = np.concatenate(label_blocks)
+
+<span class="m"># 2. Configure and run the AutoML pipeline</span>
+state = EMG2MCU.<span class="n">automl</span>(
+    data_cfg=EMG2MCU.<span class="n">DataConfig</span>(data_file=<span class="s">"synthetic.txt"</span>, label_names=[<span class="s">"A"</span>, <span class="s">"B"</span>, <span class="s">"C"</span>]),
+    preprocessing_cfg=EMG2MCU.<span class="n">PreprocessingConfig</span>(fs=fs, lowcut=<span class="n">30</span>, highcut=<span class="n">450</span>),
+    feature_cfg=EMG2MCU.<span class="n">FeatureConfig</span>(features=[<span class="s">"RMS"</span>]),
+    output_dir=Path(<span class="s">"output_emg2mcu"</span>),
+)
+
+<span class="m"># 3. The ranked classifiers live in state["deploy"]["td_results"]</span>
+<span class="k">print</span>(state[<span class="s">"deploy"</span>][<span class="s">"td_results"</span>].sort_values(<span class="s">"accuracy"</span>, ascending=<span class="c">False</span>).head())</code></pre>
+        <div class="code-foot">
+          <p class="small">The full <a href="https://github.com/LENeR-UEL/EMG2MCU/blob/main/example/EMG2MCU_example.ipynb">example
+              notebook</a> writes the synthetic recording to a temporary file, configures every stage and runs the
+            full pipeline end-to-end. Generated artifacts land in the ignored <code>output_emg2mcu/</code> directory.</p>
+        </div>
+      </div>
+
+      <div class="doc-links">
+        <a class="card doc-link" href="https://emg2mcu.readthedocs.io/en/latest/">
+          <strong>Documentation</strong><span>API reference and pipeline guide</span></a>
+        <a class="card doc-link" href="https://emg2mcu.readthedocs.io/en/latest/autoapi/EMG2MCU/">
+          <strong>API reference</strong><span><code>automl</code> and the config dataclasses</span></a>
+        <a class="card doc-link" href="https://github.com/LENeR-UEL/EMG2MCU/tree/main/example">
+          <strong>Examples</strong><span>Synthetic and real-data notebooks</span></a>
+        <a class="card doc-link" href="sandbox/">
+          <strong>Sandbox</strong><span>Run the example in your browser</span></a>
+      </div>
+    </section>
+
+    <section class="wrap section" id="cite">
+      <h2>About</h2>
+      <p>EMG2MCU is developed by the <a href="https://github.com/LENeR-UEL">LENeR-UEL</a> lab at the State University
+        of Londrina (UEL). It is open source under the MIT license; contributions, bug reports and feature requests
+        are welcome on GitHub.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <span>EMG2MCU · MIT license</span>
+      <nav aria-label="Footer">
+        <a href="https://github.com/LENeR-UEL/EMG2MCU">GitHub</a>
+        <a href="https://emg2mcu.readthedocs.io/">Docs</a>
+        <a href="https://pypi.org/project/emg2mcu/">PyPI</a>
+        <a href="sandbox/">Sandbox</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="assets/landing.js"></script>
+</body>
+</html>
